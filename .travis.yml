@@ -7,5 +7,28 @@ before_install:
   - docker build -t brandon9999/docker-react-app -f Dockerfile.dev .
 script:
   - docker run -e CI=true brandon9999/docker-react-app npm run test -- --coverage
-after_success:
-  - echo "test success "
+
+deploy:
+  provider: elasticbeanstalk
+  region: "ap-northeast-2"
+  app: "docker-react-app"
+  env: "Dockerreactapp-env"
+  bucket_name: "elasticbeanstalk-ap-northeast-2-380704220336"
+  bucket_path: "docker-react-app"
+  on:
+    branch: main
+
+access_key_id: $AWS_ACCESS_KEY
+secret_access_key: $AWS_SECRET_ACCESS_KEY
+
+# ElasticBeanstalk env 네임
+# => Dockerreactapp-env
+# 도커 앱 환경
+# => Dockerreactapp-env.eba-84pntgfs.ap-northeast-2.elasticbeanstalk.com
+# 도커 앱 이름
+# => docker-react-app
+# s3 버킷 이름
+# => elasticbeanstalk-ap-northeast-2-380704220336
+
+#after_success:
+#  - echo "test success "
